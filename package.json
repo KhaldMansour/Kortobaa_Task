@@ -1,10 +1,9 @@
 {
   "name": "kortobaa",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
-    "migrate" :"sequelize db:migrate",
+    "migrate": "sequelize db:migrate",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -26,5 +25,15 @@
     "sequelize": "^6.3.5",
     "sequelize-cli": "^6.2.0",
     "uuid": "^8.3.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KhaldMansour/Kortobaa_Task.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KhaldMansour/Kortobaa_Task/issues"
+  },
+  "homepage": "https://github.com/KhaldMansour/Kortobaa_Task#readme",
+  "description": ""
 }
