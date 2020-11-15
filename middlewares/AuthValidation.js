@@ -59,7 +59,7 @@ let  verifyToken = (req, res , next) =>
     {
         const bearer = bearerHeader.split(' ');
         const token = bearer[1];
-        jwt.verify(token, 'secret' , (err, data)=>{
+        jwt.verify(token, process.env.JWT_SECRET_KEY , (err, data)=>{
            if (err){res.status(400).send("Invalid Token")}
         })
         next();
@@ -75,7 +75,7 @@ let currentUser = (req)=>
     const bearerHeader = req.headers['authorization'];
     const bearer = bearerHeader.split(' ');
     const token = bearer[1];
-    let data = jwt.verify(token , 'secret')
+    let data = jwt.verify(token , process.env.JWT_SECRET_KEY)
     let user = data.user
     return user;
 }

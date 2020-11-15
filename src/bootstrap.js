@@ -1,3 +1,4 @@
+require
 module.exports = async()=>{
    const Product = require('../src/models/Product')
    const User = require('../src/models/User')

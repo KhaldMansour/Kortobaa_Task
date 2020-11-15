@@ -5,10 +5,10 @@ const Seeder = require("mysql-db-seed").Seeder;
 // Generate a new Seeder instance
 const seed = new Seeder(
   10, 
-  "localhost",
-  "root",
-  "root",
-  "kortobaa"
+  process.env.HOST,
+  process.env.USER_NAME,
+  process.env.PASSWORD,
+  process.env.DB_NAME
 );
 
 (async () => {
