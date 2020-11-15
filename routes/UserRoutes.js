@@ -1,8 +1,6 @@
 const express = require("express");
-const bodyParser = require("body-parser");
-const router = express.Router();
-const app = express();
 const UserController = require("../controllers/UserController");
+const router = express.Router();
 
 router.post("/login", UserController.login);
 

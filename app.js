@@ -1,13 +1,12 @@
+const dotenv = require('dotenv').config()
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 5001;
 const bodyParser = require('body-parser');
 const db = require('./src/database/connection');
-const dotenv = require('dotenv').config()
+const app = express();
+const PORT = process.env.PORT || 5001;
 
 
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
   }));
