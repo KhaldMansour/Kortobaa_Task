@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {checkEmail, RegisterValidation , LoginValidation , verifyToken, currentUser} = require('./middlewares/AuthValidation')
 const ProductValidation = require('./middlewares/ProductValidation');
+
 const multer = require('multer');
 
 const storage = multer.diskStorage(
@@ -38,10 +39,24 @@ const upload = multer(
             fileFilter: fileFilter
 });
 
+const users = require('./routes/UserRoutes');
+const products = require('./routes/ProductRoutes')
+users.use(bodyParser.json())
+users.use((bodyParser.urlencoded({
+    extended: true
+  })))
+
+
+app.use("/api/users" , users)
+// app.use("/api/products" , products)
+
 
 
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+  }));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -101,32 +116,65 @@ app.post('/api/login' , async (req, res)=>{
 
 
 
-app.get('/api/products'  , async (req, res) => {
-    let products = await Product.findAll().then().catch((err)=> console.log(err));
-    console.log(products);
-    const bearerHeader = req.headers['authorization'];
+// app.get('/api/products'  , async (req, res) => {
+//     let products = await Product.findAll().then().catch((err)=> console.log(err));
+//     console.log(products);
+//     const bearerHeader = req.headers['authorization'];
 
-    res.status(200).send(products);
-});
+//     res.status(200).send(products);
+// });
 
 
-app.get('/api/products/myproducts' ,verifyToken , async (req, res) => {
-    let user_id = currentUser(req).user_id
-    let products = await Product.findAll({where: {user_id: user_id}}).then().catch((err)=> console.log(err));
-    res.status(200).send(products);
-});
+// app.get('/api/products/myproducts' ,verifyToken , async (req, res) => {
+//     let user_id = currentUser(req).user_id
+//     let products = await Product.findAll({where: {user_id: user_id}}).then().catch((err)=> console.log(err));
+//     res.status(200).send(products);
+// });
 
-app.get('/api/products/:id' ,  async (req, res) => {
-    let product = await Product.findOne({
-        where:{
-            id:req.params.id
-        }
-    }).then().catch((err)=> console.log(err));
-    res.status(200).send(product);
-});
+// app.get('/api/products/:id' ,  async (req, res) => {
+//     let product = await Product.findOne({
+//         where:{
+//             id:req.params.id
+//         }
+//     }).then().catch((err)=> console.log(err));
+//     res.status(200).send(product);
+// });
+
+app.put('/api/products/update/:id' ,verifyToken , async (req, res)=>{
+    res.json({id: req.body, test: "test"})
+
+    // let user_id = currentUser(req).user_id;
+    // let product = await Product.findOne({
+    //     where:{
+    //         id:req.params.id
+    //     }
+    // }).then().catch((err)=> console.log(err));
+    
+    // if(product.user_id !=  user_id)
+    // {
+    //     res.status(403).send("You are unauthorized to edit this product")
+    // }
+    // res.json({id:req.body.price})
+    
+    // let productUpdated = await Product.update(
+    //     {
+    //     title: req.body.title,
+    //     image: req.body.image,
+    //     price:req.body.price,
+    //     },  
+    //     {where:
+    //         {
+    //         id:req.params.id
+    //         }
+    //     }
+
+    // ).then(res.status(200).send("Product Updated Successfully")).catch((err) => res.send(err))
+
+
+})
 
 app.post('/api/products/create' ,upload.single('image') ,verifyToken , async (req, res)=>{
-    // res.send(req.file);
+    res.send("hi");
     let user_id = currentUser(req).user_id
     let  error  = await ProductValidation(req.body);
     if(error.error){
@@ -142,35 +190,7 @@ app.post('/api/products/create' ,upload.single('image') ,verifyToken , async (re
     console.log(product);  
 } )
 
-app.put('/api/products/update/:id' ,verifyToken , async (req, res)=>{
-    let user_id = currentUser(req).user_id;
-    let product = await Product.findOne({
-        where:{
-            id:req.params.id
-        }
-    }).then().catch((err)=> console.log(err));
 
-    if(product.user_id !=  user_id)
-    {
-        res.status(403).send("You are unauthorized to edit this product")
-    }
-
-    let productUpdated = await Product.update(
-        {
-        title: req.body.title,
-        image: req.body.image,
-        price:req.body.price,
-        },  
-        {where:
-            {
-            id:req.params.id
-            }
-        }
-
-    ).then(res.status(200).send("Product Updated Successfully")).catch((err) => res.send(err))
-
-
-})
 
 app.delete('/api/products/delete/:id' , verifyToken , async (req,res) =>{
     let user_id = currentUser(req).user_id;
